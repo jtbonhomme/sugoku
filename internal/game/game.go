@@ -45,6 +45,10 @@ func (g *Game) Run() error {
 	ebiten.SetWindowTitle("Sudoko")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
+	go func() {
+		g.IsValid(0)
+	}()
+
 	return ebiten.RunGame(g)
 }
 

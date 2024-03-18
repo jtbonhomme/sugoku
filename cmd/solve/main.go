@@ -18,16 +18,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	/*
-	   grid.Display()
-	   grid.IsValid(0)
-	   grid.Display()
 
-	   // Waiting signal
-	   intChan := make(chan os.Signal, 1)
-	   signal.Notify(intChan, os.Interrupt, syscall.SIGTERM)
-
-	   <-intChan
-	*/
 	fmt.Println("Exit")
 }
