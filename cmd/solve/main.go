@@ -1,22 +1,33 @@
 package main
 
 import (
-	"github.com/jtbonhomme/sugoku/internal/sudoku"
+	"fmt"
+	//"os"
+	//"os/signal"
+	//"syscall"
+	//"time"
+
+	"github.com/jtbonhomme/sugoku/internal/game"
 )
 
-var g = sudoku.Grid{
-	{9, 0, 0, 1, 0, 0, 0, 0, 5},
-	{0, 0, 5, 0, 9, 0, 2, 0, 1},
-	{8, 0, 0, 0, 4, 0, 0, 0, 0},
-	{0, 0, 0, 0, 8, 0, 0, 0, 0},
-	{0, 0, 0, 7, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 2, 6, 0, 0, 9},
-	{2, 0, 0, 3, 0, 0, 0, 0, 6},
-	{0, 0, 0, 2, 0, 0, 9, 0, 0},
-	{0, 0, 0, 0, 0, 4, 5, 0, 0}}
-
 func main() {
-	g.Display()
-	g.IsValid(0)
-	g.Display()
+	g := game.New()
+
+	fmt.Println("Start game")
+	err := g.Run()
+	if err != nil {
+		panic(err)
+	}
+	/*
+	   grid.Display()
+	   grid.IsValid(0)
+	   grid.Display()
+
+	   // Waiting signal
+	   intChan := make(chan os.Signal, 1)
+	   signal.Notify(intChan, os.Interrupt, syscall.SIGTERM)
+
+	   <-intChan
+	*/
+	fmt.Println("Exit")
 }
