@@ -22,7 +22,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func (g *Game) drawGrid(screen *ebiten.Image) {
 	for row := 0; row < 9; row++ {
 		for col := 0; col < 9; col++ {
-			if g.grid.Values[row][col] == 0 {
+			if g.grid.CellIsEmpty(row, col) {
 				continue
 			}
 
@@ -30,7 +30,7 @@ func (g *Game) drawGrid(screen *ebiten.Image) {
 				screen, fonts.DefaultFont,
 				65+row*50,
 				85+col*50,
-				fmt.Sprintf("%d", g.grid.Values[row][col]),
+				fmt.Sprintf("%d", g.grid.Value(row, col)),
 				color.RGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xff},
 			)
 		}

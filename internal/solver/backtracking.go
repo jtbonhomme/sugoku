@@ -18,7 +18,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 	j := position % 9
 
 	// Si la case n'est pas vide, on passe à la suivante (appel récursif)
-	if grid.Values[i][j] != 0 {
+	if !grid.CellIsEmpty(i, j) {
 		return SolveWithBacktracking(position+1, grid, speed)
 	}
 
@@ -27,14 +27,14 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 		if grid.MissingInRow(byte(k), i) &&
 			grid.MissingInColumn(byte(k), j) &&
 			grid.MissingInBlock(byte(k), i, j) {
-			grid.Values[i][j] = byte(k)
+			grid.Write(i, j, byte(k))
 
 			if SolveWithBacktracking(position+1, grid, speed) {
 				return true
 			}
 		}
 	}
-	grid.Values[i][j] = 0
+	grid.Write(i, j, 0)
 
 	return false
 }
