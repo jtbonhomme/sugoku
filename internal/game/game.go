@@ -5,6 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 
+	"github.com/jtbonhomme/sugoku/internal/solver"
 	"github.com/jtbonhomme/sugoku/internal/sudoku"
 )
 
@@ -19,8 +20,8 @@ type Game struct {
 // New creates a new game object.
 func New(grid *sudoku.Grid) *Game {
 	g := &Game{
-		ScreenWidth:     800,
-		ScreenHeight:    600,
+		ScreenWidth:     550,
+		ScreenHeight:    550,
 		BackgroundColor: color.RGBA{0x0b, 0x0d, 0x00, 0xff},
 	}
 
@@ -37,7 +38,7 @@ func (g *Game) Run() error {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	go func() {
-		g.IsValid(0)
+		solver.SolveWithBacktracking(0, g.grid)
 	}()
 
 	return ebiten.RunGame(g)
