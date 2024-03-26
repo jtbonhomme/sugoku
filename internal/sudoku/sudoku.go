@@ -51,6 +51,20 @@ func (g *Grid) Candidates(i, j int) [Dim]byte {
 	return g.candidates[i][j]
 }
 
+func (g *Grid) SetCandidate(i, j int, b byte) {
+	if b < 1 || b > 9 {
+		return
+	}
+	g.candidates[i][j][b-1] = b
+}
+
+func (g *Grid) UnsetCandidate(i, j int, b byte) {
+	if b < 1 || b > 9 {
+		return
+	}
+	g.candidates[i][j][b-1] = 0
+}
+
 func (g *Grid) MissingInRow(k byte, i int) bool {
 	for j := 0; j < 9; j++ {
 		if g.values[i][j] == k {
