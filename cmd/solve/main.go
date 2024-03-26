@@ -21,6 +21,7 @@ func main() {
 	flag.Parse()
 
 	grid := sudoku.NewFromFile(filename)
+	solver.FillCandidates(grid)
 
 	var wg sync.WaitGroup
 	var m sync.Mutex

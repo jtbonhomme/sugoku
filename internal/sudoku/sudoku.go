@@ -9,8 +9,8 @@ import (
 const Dim int = 9
 
 type Grid struct {
-	values     [Dim][Dim]byte
-	candidates [Dim][Dim][Dim]byte
+	values     [Dim][Dim]byte      // rows x cols
+	candidates [Dim][Dim][Dim]byte // rows x cols x candidates
 }
 
 func New() *Grid {
@@ -29,8 +29,6 @@ func NewFromFile(filename string) *Grid {
 		log.Fatal(err)
 	}
 
-	//grid.candidates[Dim-1][Dim-1] = [Dim]byte{1, 2, 3, 4, 5, 6, 7, 8, 9}
-
 	return &grid
 }
 
@@ -40,7 +38,7 @@ func (g *Grid) CellIsEmpty(i, j int) bool {
 
 func (g *Grid) Write(i, j int, b byte) {
 	g.values[i][j] = b
-	g.candidates[i][j] = [Dim]byte{}
+	g.ResetCandidates(i, j)
 }
 
 func (g *Grid) Value(i, j int) byte {
@@ -56,6 +54,10 @@ func (g *Grid) SetCandidate(i, j int, b byte) {
 		return
 	}
 	g.candidates[i][j][b-1] = b
+}
+
+func (g *Grid) ResetCandidates(i, j int) {
+	g.candidates[i][j] = [Dim]byte{}
 }
 
 func (g *Grid) UnsetCandidate(i, j int, b byte) {
