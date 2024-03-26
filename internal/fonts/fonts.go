@@ -11,12 +11,14 @@ import (
 )
 
 const (
-	dpi      float64 = 72
-	FontSize int     = 30
+	dpi           float64 = 72
+	FontSize      int     = 30
+	SmallFontSize int     = 15
 )
 
 //go:embed Roboto.ttf
 var robotoFontData []byte
+var SmallFont font.Face
 var DefaultFont font.Face
 var DefaultTitleFont font.Face
 var DefaultDebugFont font.Face
@@ -31,6 +33,12 @@ func init() {
 
 	DefaultFont = truetype.NewFace(robotoFont, &truetype.Options{
 		Size:    float64(FontSize),
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
+
+	SmallFont = truetype.NewFace(robotoFont, &truetype.Options{
+		Size:    float64(SmallFontSize),
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})

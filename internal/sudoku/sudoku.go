@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-const DIM int = 9
+const Dim int = 9
 
 type Grid struct {
-	values     [DIM][DIM]byte
-	candidates [DIM][DIM][DIM]byte
+	values     [Dim][Dim]byte
+	candidates [Dim][Dim][Dim]byte
 }
 
 func New() *Grid {
@@ -29,6 +29,8 @@ func NewFromFile(filename string) *Grid {
 		log.Fatal(err)
 	}
 
+	//grid.candidates[Dim-1][Dim-1] = [Dim]byte{1, 2, 3, 4, 5, 6, 7, 8, 9}
+
 	return &grid
 }
 
@@ -38,10 +40,15 @@ func (g *Grid) CellIsEmpty(i, j int) bool {
 
 func (g *Grid) Write(i, j int, b byte) {
 	g.values[i][j] = b
+	g.candidates[i][j] = [Dim]byte{}
 }
 
 func (g *Grid) Value(i, j int) byte {
 	return g.values[i][j]
+}
+
+func (g *Grid) Candidates(i, j int) [Dim]byte {
+	return g.candidates[i][j]
 }
 
 func (g *Grid) MissingInRow(k byte, i int) bool {

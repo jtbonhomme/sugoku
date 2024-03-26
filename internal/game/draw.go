@@ -8,6 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/vector"
 
 	"github.com/jtbonhomme/sugoku/internal/fonts"
+	"github.com/jtbonhomme/sugoku/internal/sudoku"
 	"github.com/jtbonhomme/sugoku/internal/text"
 )
 
@@ -16,12 +17,37 @@ import (
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(g.BackgroundColor)
 	g.drawFrame(screen)
-	g.drawGrid(screen)
+	g.drawGridCandidates(screen)
+	g.drawGridValues(screen)
 }
 
-func (g *Game) drawGrid(screen *ebiten.Image) {
-	for row := 0; row < 9; row++ {
-		for col := 0; col < 9; col++ {
+func (g *Game) drawGridCandidates(screen *ebiten.Image) {
+	for row := 0; row < sudoku.Dim; row++ {
+		for col := 0; col < sudoku.Dim; col++ {
+			if !g.grid.CellIsEmpty(row, col) {
+				continue
+			}
+
+			for i, c := range g.grid.Candidates(row, col) {
+				y := i % 3
+				x := (i - y) / 3
+				if c != 0 {
+					text.DrawTextAtPos(
+						screen, fonts.SmallFont,
+						55+row*50+y*14,
+						65+col*50+x*14,
+						fmt.Sprintf("%d", c),
+						color.RGBA{R: 0xaf, G: 0xaf, B: 0xff, A: 0xaf},
+					)
+				}
+			}
+		}
+	}
+}
+
+func (g *Game) drawGridValues(screen *ebiten.Image) {
+	for row := 0; row < sudoku.Dim; row++ {
+		for col := 0; col < sudoku.Dim; col++ {
 			if g.grid.CellIsEmpty(row, col) {
 				continue
 			}
