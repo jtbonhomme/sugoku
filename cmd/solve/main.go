@@ -1,34 +1,39 @@
 package main
 
 import (
-	"fmt"
-	//	"os"
+	"encoding/json"
+	"flag"
+	"log"
+	"os"
 
 	"github.com/jtbonhomme/sugoku/internal/game"
 	"github.com/jtbonhomme/sugoku/internal/sudoku"
 )
 
 func main() {
-	//	file, _ := os.ReadFile("_examples/backtracking.json")
+	var err error
+	var filename string
+	flag.StringVar(&filename, "f", "_examples/backtracking.json", "initial grid (default is _examples/backtracking.json)")
+	flag.Parse()
 
-	grid := sudoku.Grid{
-		{9, 0, 0, 1, 0, 0, 0, 0, 5},
-		{0, 0, 5, 0, 9, 0, 2, 0, 1},
-		{8, 0, 0, 0, 4, 0, 0, 0, 0},
-		{0, 0, 0, 0, 8, 0, 0, 0, 0},
-		{0, 0, 0, 7, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 2, 6, 0, 0, 9},
-		{2, 0, 0, 3, 0, 0, 0, 0, 6},
-		{0, 0, 0, 2, 0, 0, 9, 0, 0},
-		{0, 0, 0, 0, 0, 4, 5, 0, 0}}
+	fileBytes, err := os.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	grid := sudoku.Grid{}
+	err = json.Unmarshal(fileBytes, &grid)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	g := game.New(&grid)
 
-	fmt.Println("Start game")
-	err := g.Run()
+	log.Println("Start game")
+	err = g.Run()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	fmt.Println("Exit")
+	log.Println("Exit")
 }
