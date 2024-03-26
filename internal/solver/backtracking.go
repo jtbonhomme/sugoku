@@ -13,6 +13,8 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 		return true
 	}
 
+	FillCandidates(grid)
+
 	// On récupère les coordonnées de la case
 	row := position / sudoku.Dim
 	col := position % sudoku.Dim
@@ -34,6 +36,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 			}
 		}
 	}
+
 	grid.Write(row, col, 0)
 
 	return false
@@ -48,7 +51,8 @@ func FillCandidatesAtPos(position int, grid *sudoku.Grid) {
 	if !grid.CellIsEmpty(row, col) {
 		return
 	}
-	//grid.ResetCandidates(row, col)
+
+	grid.ResetCandidates(row, col)
 
 	for k := 1; k <= sudoku.Dim; k++ {
 		if grid.MissingInRow(byte(k), row) &&
@@ -69,7 +73,8 @@ func FillCandidates(grid *sudoku.Grid) {
 		if !grid.CellIsEmpty(row, col) {
 			continue
 		}
-		//grid.ResetCandidates(row, col)
+
+		grid.ResetCandidates(row, col)
 		for k := 1; k <= sudoku.Dim; k++ {
 			if grid.MissingInRow(byte(k), row) &&
 				grid.MissingInColumn(byte(k), col) &&

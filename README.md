@@ -8,6 +8,8 @@ Sodoku puzzle solver with batcktrack algorithm written in Golang.
 
 ![](https://github.com/jtbonhomme/sugoku/blob/master/Sudoku_solved_by_bactracking.gif)
 
+![](https://github.com/jtbonhomme/sugoku/blob/master/Sudoku_solved_by_bactracking_with_candidates.gif)
+
 ## Sources
 
 * https://en.wikipedia.org/wiki/Backtracking
