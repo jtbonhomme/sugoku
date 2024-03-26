@@ -6,8 +6,8 @@ import (
 	"github.com/jtbonhomme/sugoku/internal/sudoku"
 )
 
-func SolveWithBacktracking(position int, grid *sudoku.Grid) bool {
-	time.Sleep(time.Millisecond * 7)
+func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
+	time.Sleep(time.Millisecond * time.Duration(speed))
 	// Si on est à la 82e case (on sort du tableau)
 	if position == 9*9 {
 		return true
@@ -19,7 +19,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid) bool {
 
 	// Si la case n'est pas vide, on passe à la suivante (appel récursif)
 	if grid[i][j] != 0 {
-		return SolveWithBacktracking(position+1, grid)
+		return SolveWithBacktracking(position+1, grid, speed)
 	}
 
 	// Backtracking
@@ -29,7 +29,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid) bool {
 			grid.MissingInBlock(byte(k), i, j) {
 			grid[i][j] = byte(k)
 
-			if SolveWithBacktracking(position+1, grid) {
+			if SolveWithBacktracking(position+1, grid, speed) {
 				return true
 			}
 		}

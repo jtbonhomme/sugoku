@@ -2,10 +2,10 @@ package game
 
 import (
 	"image/color"
+	"sync"
 
 	"github.com/hajimehoshi/ebiten/v2"
 
-	"github.com/jtbonhomme/sugoku/internal/solver"
 	"github.com/jtbonhomme/sugoku/internal/sudoku"
 )
 
@@ -15,17 +15,19 @@ type Game struct {
 	ScreenHeight    int
 	BackgroundColor color.Color
 	grid            *sudoku.Grid
+	wg              *sync.WaitGroup
 }
 
 // New creates a new game object.
-func New(grid *sudoku.Grid) *Game {
+func New(grid *sudoku.Grid, wg *sync.WaitGroup) *Game {
 	g := &Game{
 		ScreenWidth:     550,
 		ScreenHeight:    550,
 		BackgroundColor: color.RGBA{0x0b, 0x0d, 0x00, 0xff},
+		wg:              wg,
+		grid:            grid,
 	}
-
-	g.grid = grid
+	wg.Add(1)
 
 	return g
 }
@@ -37,9 +39,7 @@ func (g *Game) Run() error {
 	ebiten.SetWindowTitle("Sudoko")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
-	go func() {
-		solver.SolveWithBacktracking(0, g.grid)
-	}()
+	g.wg.Done()
 
 	return ebiten.RunGame(g)
 }
