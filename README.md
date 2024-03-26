@@ -12,3 +12,7 @@ Sodoku puzzle solver with batcktrack algorithm written in Golang.
 
 * https://en.wikipedia.org/wiki/Backtracking
 * https://openclassrooms.com/courses/le-backtracking-par-l-exemple-resoudre-un-sudoku
+
+## Todo
+
+* [ ] Interactive play mode
