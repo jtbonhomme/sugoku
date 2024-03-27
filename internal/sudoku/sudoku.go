@@ -100,3 +100,39 @@ func (g *Grid) MissingInBlock(k byte, i, j int) bool {
 
 	return true
 }
+
+func (g *Grid) IsRowComplete(row int) bool {
+	result := [Dim]byte{}
+	for col := 0; col < Dim; col++ {
+		c := g.Value(row, col)
+		result[c-1] = c
+	}
+	for i := 0; i < Dim; i++ {
+		if result[i] != byte(i+1) {
+			return false
+		}
+	}
+	return false
+}
+
+func (g *Grid) IsColComplete(col int) bool {
+	return false
+}
+
+func (g *Grid) IsBlockComplete(row, col int) bool {
+	return false
+}
+
+func (g *Grid) IsComplete() bool {
+	for row := 0; row < Dim; row++ {
+		if !g.IsRowComplete(row) {
+			return false
+		}
+		for col := 0; col < Dim; col++ {
+			if !g.IsColComplete(col) || !g.IsBlockComplete(row, col) {
+				return false
+			}
+		}
+	}
+	return true
+}
