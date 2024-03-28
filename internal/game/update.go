@@ -16,5 +16,6 @@ func (g *Game) Update() error {
 		log.Printf("key press ESCAPE: exit program")
 		return ErrQuit
 	}
+
 	return nil
 }

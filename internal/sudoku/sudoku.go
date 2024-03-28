@@ -106,6 +106,10 @@ func (g *Grid) IsRowComplete(row int) bool {
 
 	for col := 0; col < Dim; col++ {
 		v := g.Value(row, col)
+		if v == 0 {
+			continue
+		}
+
 		result[v-1] = v
 	}
 
@@ -123,6 +127,10 @@ func (g *Grid) IsColComplete(col int) bool {
 
 	for row := 0; row < Dim; row++ {
 		v := g.Value(row, col)
+		if v == 0 {
+			continue
+		}
+
 		result[v-1] = v
 	}
 
@@ -143,6 +151,10 @@ func (g *Grid) IsBlockComplete(row, col int) bool {
 	for r := row; r < row+3; r++ {
 		for c := col; c < col+3; c++ {
 			v := g.Value(r, c)
+			if v == 0 {
+				continue
+			}
+
 			result[v-1] = v
 		}
 	}

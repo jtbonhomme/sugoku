@@ -19,6 +19,21 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.drawFrame(screen)
 	g.drawGridCandidates(screen)
 	g.drawGridValues(screen)
+
+	if g.grid.IsComplete() {
+		g.drawFinish(screen)
+	}
+
+}
+
+func (g *Game) drawFinish(screen *ebiten.Image) {
+	text.DrawTextAtPos(
+		screen, fonts.DefaultFont,
+		5,
+		35,
+		"YOU WIN!",
+		color.RGBA{R: 0x00, G: 0xff, B: 0xff, A: 0xff},
+	)
 }
 
 func (g *Game) drawGridCandidates(screen *ebiten.Image) {
