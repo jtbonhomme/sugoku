@@ -87,3 +87,12 @@ func TestIsBlockComplete(t *testing.T) {
 		}
 	}
 }
+
+func TestIsComplete(t *testing.T) {
+	if !testGridOK.IsComplete() {
+		t.Errorf("expected grid to be complete but is not")
+	}
+	if testGridKO.IsComplete() {
+		t.Errorf("expected grid not to be complete but is actually")
+	}
+}

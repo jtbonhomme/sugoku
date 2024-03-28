@@ -161,11 +161,13 @@ func (g *Grid) IsComplete() bool {
 		if !g.IsRowComplete(row) {
 			return false
 		}
+
 		for col := 0; col < Dim; col++ {
 			if !g.IsColComplete(col) || !g.IsBlockComplete(row, col) {
 				return false
 			}
 		}
 	}
+
 	return true
 }
