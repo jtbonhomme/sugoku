@@ -103,24 +103,57 @@ func (g *Grid) MissingInBlock(k byte, i, j int) bool {
 
 func (g *Grid) IsRowComplete(row int) bool {
 	result := [Dim]byte{}
+
 	for col := 0; col < Dim; col++ {
-		c := g.Value(row, col)
-		result[c-1] = c
+		v := g.Value(row, col)
+		result[v-1] = v
 	}
+
 	for i := 0; i < Dim; i++ {
 		if result[i] != byte(i+1) {
 			return false
 		}
 	}
-	return false
+
+	return true
 }
 
 func (g *Grid) IsColComplete(col int) bool {
-	return false
+	result := [Dim]byte{}
+
+	for row := 0; row < Dim; row++ {
+		v := g.Value(row, col)
+		result[v-1] = v
+	}
+
+	for i := 0; i < Dim; i++ {
+		if result[i] != byte(i+1) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func (g *Grid) IsBlockComplete(row, col int) bool {
-	return false
+	row = row - row%3
+	col = col - col%3
+	result := [Dim]byte{}
+
+	for r := row; r < row+3; r++ {
+		for c := col; c < col+3; c++ {
+			v := g.Value(r, c)
+			result[v-1] = v
+		}
+	}
+
+	for i := 0; i < Dim; i++ {
+		if result[i] != byte(i+1) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func (g *Grid) IsComplete() bool {
