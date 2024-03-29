@@ -12,9 +12,17 @@ Sodoku puzzle solver with batcktrack algorithm written in Golang.
 
 ![](https://github.com/jtbonhomme/sugoku/blob/master/Sudoku_solved_by_bactracking_with_candidates.gif)
 
+```sh
+go run cmd/solver/main.go -f _examples/not-unique-solution.json -s 3
+```
+
 ### Generator
 
-Same code than the solver, except than we start from an emprty grid.
+Same code than the solver, except than we start from an emprty grid and without graphical display.
+
+```sh
+go run cmd/headless/main.go
+```
 
 ## Sources
 

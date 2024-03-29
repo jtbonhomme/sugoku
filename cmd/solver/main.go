@@ -15,13 +15,14 @@ func main() {
 	var err error
 	var filename string
 	var speed int
+	var noCandidates bool
 
-	flag.StringVar(&filename, "f", "_examples/backtracking.json", "initial grid (default is _examples/backtracking.json)")
+	flag.StringVar(&filename, "f", "_examples/not-unique-solution.json", "initial grid (default is _examples/backtracking.json)")
 	flag.IntVar(&speed, "s", 1, "speed resolution (default is 1)")
+	flag.BoolVar(&noCandidates, "n", false, "do not display candidates (default is false)")
 	flag.Parse()
 
 	grid := sudoku.NewFromFile(filename)
-	solver.FillCandidates(grid)
 
 	var wg sync.WaitGroup
 	var m sync.Mutex
@@ -33,7 +34,7 @@ func main() {
 		wg.Wait()
 		start := time.Now()
 		log.Println("start backtracking sudoku")
-		solver.SolveWithBacktracking(0, grid, speed)
+		solver.SolveWithBacktracking(0, grid, speed, noCandidates)
 		log.Printf("sudoku solved in %s", time.Since(start))
 		log.Println("press CTRL+C to quit")
 	}()

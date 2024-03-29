@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"time"
 
@@ -10,13 +11,16 @@ import (
 
 func main() {
 	var speed int
+	var filename string
 
-	grid := sudoku.New()
-	solver.FillCandidates(grid)
+	flag.StringVar(&filename, "f", "_examples/empty.json", "initial grid (default is _examples/backtracking.json)")
+	flag.Parse()
+
+	grid := sudoku.NewFromFile(filename)
 
 	start := time.Now()
 	log.Println("start backtracking sudoku")
-	solver.SolveWithBacktracking(0, grid, speed)
+	solver.SolveWithBacktracking(0, grid, speed, true)
 	log.Printf("sudoku solved in %s", time.Since(start))
 	log.Println("press CTRL+C to quit")
 

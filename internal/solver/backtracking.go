@@ -11,14 +11,16 @@ func init() {
 	rand.Seed(time.Now().Unix())
 }
 
-func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
+func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int, noCandidates bool) bool {
 	time.Sleep(time.Millisecond * time.Duration(speed))
 	// Si on est à la 82e case (on sort du tableau)
 	if position == sudoku.Dim*sudoku.Dim {
 		return true
 	}
 
-	FillCandidates(grid)
+	if !noCandidates {
+		FillCandidates(grid)
+	}
 
 	// On récupère les coordonnées de la case
 	row := position / sudoku.Dim
@@ -26,7 +28,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 
 	// Si la case n'est pas vide, on passe à la suivante (appel récursif)
 	if !grid.CellIsEmpty(row, col) {
-		return SolveWithBacktracking(position+1, grid, speed)
+		return SolveWithBacktracking(position+1, grid, speed, noCandidates)
 	}
 
 	values := [sudoku.Dim]byte{}
@@ -45,7 +47,7 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 			grid.MissingInBlock(values[k-1], row, col) {
 			grid.Write(row, col, values[k-1])
 
-			if SolveWithBacktracking(position+1, grid, speed) {
+			if SolveWithBacktracking(position+1, grid, speed, noCandidates) {
 				return true
 			}
 		}
