@@ -2,6 +2,7 @@ package sudoku
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 )
@@ -43,6 +44,10 @@ func (g *Grid) Write(i, j int, b byte) {
 
 func (g *Grid) Value(i, j int) byte {
 	return g.values[i][j]
+}
+
+func (g *Grid) Values() [Dim][Dim]byte {
+	return g.values
 }
 
 func (g *Grid) Candidates(i, j int) [Dim]byte {
@@ -182,4 +187,25 @@ func (g *Grid) IsComplete() bool {
 	}
 
 	return true
+}
+
+func (g *Grid) ValuesToString() string {
+	var values string
+
+	for row := 0; row < Dim; row++ {
+		if row%3 == 0 {
+			values += "\n"
+		}
+		for col := 0; col < Dim; col++ {
+			if col%3 == 0 {
+				values += "  "
+			}
+			values += fmt.Sprintf("  %d", g.values[row][col])
+		}
+		values += "\n"
+	}
+
+	values += "\n"
+
+	return values
 }

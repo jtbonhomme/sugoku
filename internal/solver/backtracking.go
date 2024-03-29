@@ -1,10 +1,15 @@
 package solver
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/jtbonhomme/sugoku/internal/sudoku"
 )
+
+func init() {
+	rand.Seed(time.Now().Unix())
+}
 
 func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 	time.Sleep(time.Millisecond * time.Duration(speed))
@@ -24,12 +29,21 @@ func SolveWithBacktracking(position int, grid *sudoku.Grid, speed int) bool {
 		return SolveWithBacktracking(position+1, grid, speed)
 	}
 
+	values := [sudoku.Dim]byte{}
+	for k := 1; k <= sudoku.Dim; k++ {
+		values[k-1] = byte(k)
+	}
+
+	rand.Shuffle(len(values), func(i, j int) {
+		values[i], values[j] = values[j], values[i]
+	})
+
 	// Backtracking
 	for k := 1; k <= sudoku.Dim; k++ {
-		if grid.MissingInRow(byte(k), row) &&
-			grid.MissingInColumn(byte(k), col) &&
-			grid.MissingInBlock(byte(k), row, col) {
-			grid.Write(row, col, byte(k))
+		if grid.MissingInRow(values[k-1], row) &&
+			grid.MissingInColumn(values[k-1], col) &&
+			grid.MissingInBlock(values[k-1], row, col) {
+			grid.Write(row, col, values[k-1])
 
 			if SolveWithBacktracking(position+1, grid, speed) {
 				return true
