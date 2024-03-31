@@ -12,11 +12,22 @@ import (
 	"github.com/jtbonhomme/sugoku/internal/text"
 )
 
+const (
+	BoardX        float32 = 50
+	BoardY        float32 = 50
+	BoardWidth    float32 = 450
+	BoardHeight   float32 = 450
+	BoardCellSize float32 = 50
+)
+
 // Draw draws the game screen.
 // Draw is called every frame (typically 1/60[s] for 60Hz display).
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.Fill(g.BackgroundColor)
+	g.drawDebug(screen)
+
 	g.drawFrame(screen)
+
 	g.drawGridCandidates(screen)
 	g.drawGridValues(screen)
 
@@ -81,10 +92,10 @@ func (g *Game) drawGridValues(screen *ebiten.Image) {
 func (g *Game) drawFrame(screen *ebiten.Image) {
 	var x, y, width, height, strokeWidth, step float32
 
-	x, y = 50, 50
-	width, height = 450, 450
+	x, y = BoardX, BoardY
+	width, height = BoardWidth, BoardHeight
 	strokeWidth = 1
-	step = 50
+	step = BoardCellSize
 
 	for i := 0; i < 10; i++ {
 		vector.StrokeLine(screen,
@@ -103,4 +114,88 @@ func (g *Game) drawFrame(screen *ebiten.Image) {
 			x+step*float32(3*i), y, x+step*float32(3*i), y+height,
 			3*strokeWidth, color.RGBA{0xff, 0xff, 0xff, 0xff}, false)
 	}
+}
+
+func (g *Game) drawDebug(screen *ebiten.Image) {
+	//if !g.debug {
+	//	return
+	//}
+
+	col, row := g.currentCase()
+	if col != -1 && row != -1 {
+		g.drawDebugCurrentCol(screen, col)
+		g.drawDebugCurrentRow(screen, row)
+		g.drawDebugCurrentBlock(screen, row, col)
+	}
+	debug := fmt.Sprintf("col, row = %d,   %d", col, row)
+	text.DrawTextAtPos(
+		screen, fonts.DefaultFont,
+		5,
+		35,
+		debug,
+		color.RGBA{R: 0x00, G: 0xff, B: 0xff, A: 0xff},
+	)
+}
+
+func (g *Game) drawDebugCurrentCol(screen *ebiten.Image, col int) {
+	x := BoardX
+	y := BoardX
+	vector.DrawFilledRect(screen,
+		x+float32(col)*BoardCellSize,
+		y,
+		BoardCellSize,
+		BoardCellSize*float32(sudoku.Dim),
+		color.RGBA{0x15, 0x15, 0x25, 0x30},
+		true)
+}
+
+func (g *Game) drawDebugCurrentRow(screen *ebiten.Image, row int) {
+	x := BoardX
+	y := BoardX
+	vector.DrawFilledRect(screen,
+		x,
+		y+float32(row)*BoardCellSize,
+		BoardCellSize*float32(sudoku.Dim),
+		BoardCellSize,
+		color.RGBA{0x15, 0x15, 0x25, 0x30},
+		true)
+}
+
+func (g *Game) drawDebugCurrentBlock(screen *ebiten.Image, row, col int) {
+	x := BoardX
+	y := BoardX
+	row = row - row%3
+	col = col - col%3
+	vector.DrawFilledRect(screen,
+		x+float32(col)*BoardCellSize,
+		y+float32(row)*BoardCellSize,
+		BoardCellSize*float32(sudoku.Dim/3),
+		BoardCellSize*float32(sudoku.Dim/3),
+		color.RGBA{0x25, 0x25, 0x35, 0x20},
+		true)
+}
+
+func (g *Game) currentCase() (col, row int) {
+	xCursor, yCursor := ebiten.CursorPosition()
+
+	col = (xCursor - int(BoardX)) / int(BoardCellSize)
+	row = (yCursor - int(BoardY)) / int(BoardCellSize)
+
+	// cursor out of range
+	if xCursor < int(BoardX) {
+		col = -1
+	}
+	if xCursor > (int(BoardX) + int(BoardCellSize)*sudoku.Dim) {
+		col = -1
+	}
+
+	if yCursor < int(BoardY) {
+		row = -1
+	}
+
+	if yCursor > (int(BoardY) + int(BoardCellSize)*sudoku.Dim) {
+		row = -1
+	}
+
+	return col, row
 }
